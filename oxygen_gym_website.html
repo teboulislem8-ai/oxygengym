@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oxygen Gym — Constantine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #050505;
+            --bg-secondary: #0a0a0a;
+            --bg-card: #111111;
+            --bg-glass: rgba(17, 17, 17, 0.7);
+            --accent-red: #dc2626;
+            --accent-red-glow: rgba(220, 38, 38, 0.3);
+            --accent-gold: #fbbf24;
+            --accent-gold-glow: rgba(251, 191, 36, 0.3);
+            --accent-teal: #14b8a6;
+            --accent-teal-glow: rgba(20, 184, 166, 0.3);
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-red);
+            border-radius: 4px;
+        }
+
+        /* Hexagon Pattern Background */
+        .hex-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-7.5L27.99 34H28v2.31h-.01L17 42.65V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1.2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 0.8rem 5%;
+            background: rgba(5, 5, 5, 0.95);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            color: var(--accent-red);
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-gold));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-red);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--accent-red), #b91c1c);
+            color: white;
+            padding: 0.6rem 1.4rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 20px var(--accent-red-glow);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--accent-red-glow);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 8rem 5% 4rem;
+            overflow: hidden;
+        }
+
+        .hero-bg-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-red-glow) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--accent-red);
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .hero-badge .star {
+            color: var(--accent-gold);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-slogan {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .hero-slogan strong {
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-red), #b91c1c);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 25px var(--accent-red-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px var(--accent-red-glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: 1px solid var(--border-hover);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-gold);
+            background: rgba(251, 191, 36, 0.05);
+        }
+
+        /* Floating Stats */
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent-gold);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Section Styles */
+        section {
+            position: relative;
+            z-index: 2;
+            padding: 6rem 5%;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .section-header h2 .accent {
+            color: var(--accent-red);
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-red), var(--accent-gold));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(220, 38, 38, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Pricing Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.4s;
+            overflow: hidden;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--accent-gold);
+            background: linear-gradient(180deg, rgba(251, 191, 36, 0.05) 0%, var(--bg-card) 100%);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::after {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: 1.5rem;
+            right: -2.5rem;
+            background: var(--accent-gold);
+            color: black;
+            padding: 0.3rem 2.5rem;
+            font-size: 0.7rem;
+            font-weight: 800;
+            transform: rotate(45deg);
+            letter-spacing: 1px;
+        }
+
+        .pricing-card:hover {
+            border-color: var(--border-hover);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .pricing-header {
+            margin-bottom: 2rem;
+        }
+
+        .pricing-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pricing-name .ar {
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 800;
+        }
+
+        .pricing-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 900;
+            margin: 1rem 0;
+            display: flex;
+            align-items: baseline;
+            gap: 0.3rem;
+        }
+
+        .pricing-price .currency {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .pricing-price .period {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .pricing-original {
+            text-decoration: line-through;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-discount {
+            display: inline-block;
+            background: rgba(220, 38, 38, 0.15);
+            color: var(--accent-red);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-features .check {
+            color: var(--accent-teal);
+            font-weight: 700;
+        }
+
+        .pricing-btn {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-hover);
+            background: transparent;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .pricing-btn:hover {
+            background: var(--accent-red);
+            border-color: var(--accent-red);
+            box-shadow: 0 4px 20px var(--accent-red-glow);
+        }
+
+        .pricing-card.featured .pricing-btn {
+            background: linear-gradient(135deg, var(--accent-gold), #d97706);
+            color: black;
+            border: none;
+            font-weight: 700;
+        }
+
+        .pricing-card.featured .pricing-btn:hover {
+            box-shadow: 0 4px 25px var(--accent-gold-glow);
+        }
+
+        /* Gallery / Space Section */
+        .gallery-section {
+            background: var(--bg-secondary);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 250px);
+            gap: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-item.large {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .gallery-item.wide {
+            grid-column: span 2;
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem 1.5rem 1.5rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            color: white;
+        }
+
+        .gallery-overlay h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .gallery-overlay p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Motto Banner */
+        .motto-banner {
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.1), rgba(251, 191, 36, 0.05));
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 4rem 5%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .motto-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-red), var(--accent-gold), transparent);
+        }
+
+        .motto-text {
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            line-height: 1.3;
+        }
+
+        .motto-text .red {
+            color: var(--accent-red);
+        }
+
+        .motto-text .gold {
+            color: var(--accent-gold);
+        }
+
+        .motto-sub {
+            margin-top: 1rem;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        /* Trainers */
+        .trainers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .trainer-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s;
+            text-align: center;
+        }
+
+        .trainer-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border-hover);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .trainer-img {
+            width: 100%;
+            height: 320px;
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .trainer-img::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(transparent, var(--bg-card));
+        }
+
+        .trainer-info {
+            padding: 1.5rem;
+            margin-top: -2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .trainer-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .trainer-info p {
+            color: var(--accent-red);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .trainer-social {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .trainer-social a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s;
+            border: 1px solid var(--border);
+        }
+
+        .trainer-social a:hover {
+            background: var(--accent-red);
+            color: white;
+            border-color: var(--accent-red);
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            background: var(--bg-secondary);
+        }
+
+        .testimonial-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 1rem;
+            left: 1.5rem;
+            font-size: 4rem;
+            color: var(--accent-red);
+            opacity: 0.3;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .testimonial-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-gold));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+        }
+
+        .author-info h4 {
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .author-info .stars {
+            color: var(--accent-gold);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 4rem 5% 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-brand h3 span {
+            color: var(--accent-red);
+        }
+
+        .footer-brand p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+        }
+
+        .footer-social a:hover {
+            background: var(--accent-red);
+            color: white;
+            border-color: var(--accent-red);
+            transform: translateY(-3px);
+        }
+
+        .footer-links h4 {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-red);
+        }
+
+        .footer-contact p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding-top: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(3, 200px);
+            }
+            .gallery-item.large {
+                grid-column: span 2;
+                grid-row: span 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--bg-secondary);
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1.5rem;
+                border-bottom: 1px solid var(--border);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .hero-stats {
+                gap: 2rem;
+            }
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+            }
+            .gallery-item, .gallery-item.large, .gallery-item.wide {
+                grid-column: span 1;
+                grid-row: span 1;
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-cta-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hex-bg"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="logo">
+            <div class="logo-icon">O₂</div>
+            Oxygen<span>Gym</span>
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#space">Space</a></li>
+            <li><a href="#trainers">Trainers</a></li>
+            <li><a href="#reviews">Reviews</a></li>
+            <li><a href="#contact" class="nav-cta">Join Now</a></li>
+        </ul>
+        <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg-glow"></div>
+        <div class="hero-content">
+            <div class="hero-badge animate">
+                <span class="star">★</span> 4.4 Rating — 20+ Reviews — Constantine
+            </div>
+            <h1 class="animate delay-1">
+                Never Give Up,<br>
+                <span class="highlight">Great Things Take Time</span>
+            </h1>
+            <p class="hero-slogan animate delay-2">
+                <strong>Eat.</strong> Train. <strong>Sleep.</strong> Repeat.
+            </p>
+            <div class="hero-cta-group animate delay-2">
+                <a href="#pricing" class="btn-primary">
+                    View Offers →
+                </a>
+                <a href="#contact" class="btn-secondary">
+                    Get Directions
+                </a>
+            </div>
+            <div class="hero-stats animate delay-3">
+                <div class="stat-item">
+                    <span class="stat-value">12k+</span>
+                    <span class="stat-label">Happy Members</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">50+</span>
+                    <span class="stat-label">Machines</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">24/7</span>
+                    <span class="stat-label">Open Access</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">4.4★</span>
+                    <span class="stat-label">Rated Top Gym</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Motto Banner -->
+    <div class="motto-banner">
+        <div class="motto-text">
+            <span class="red">Installing</span> Muscles... <span class="gold">Loading</span>
+        </div>
+        <div class="motto-sub">Train Hard. No Excuses.</div>
+    </div>
+
+    <!-- Features Section -->
+    <section id="features">
+        <div class="section-header">
+            <h2>Inspired to <span class="accent">Inspire Your Best Self</span></h2>
+            <p>Your partner in achieving a healthier, stronger, and more confident you. Best gym in Constantine with modern equipment and air-conditioned space.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">💪</div>
+                <h3>Strength Training</h3>
+                <p>Develop power and resilience through expert-guided strength training tailored to all fitness levels.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">❤️</div>
+                <h3>Cardio Zone</h3>
+                <p>Boost endurance and heart health with high-energy cardio sessions designed to keep you moving.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>HIIT Workouts</h3>
+                <p>Maximize calorie burn and improve fitness with short, intense high-intensity interval training sessions.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔥</div>
+                <h3>Fat Loss Programs</h3>
+                <p>Shed unwanted fat with dynamic workout routines and fat-burning strategies that deliver lasting results.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">❄️</div>
+                <h3>Air Conditioned</h3>
+                <p>Train in comfort with our fully air-conditioned, modern facility designed for peak performance.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Expert Trainers</h3>
+                <p>Our team of certified trainers brings unparalleled expertise to help you achieve your fitness goals.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" style="background: var(--bg-secondary);">
+        <div class="section-header">
+            <h2>Discover <span class="accent">What Sets Us Apart</span></h2>
+            <p>Flexible membership options for every schedule. All plans include full access to our modern equipment and expert guidance.</p>
+        </div>
+        <div class="pricing-grid">
+            <!-- Men's Plans -->
+            <div class="pricing-card">
+                <div class="pricing-header">
+                    <div class="pricing-name">
+                        <span class="ar">عرض البداية</span> <span style="color: var(--text-muted); font-size: 0.9rem;">| Starter</span>
+                    </div>
+                    <div class="pricing-desc">Perfect for beginners. 3 sessions per week.</div>
+                    <div class="pricing-price">
+                        1,500 <span class="currency">DA</span> <span class="period">/mo</span>
+                    </div>
+                </div>
+                <ul class="pricing-features">
+                    <li><span class="check">✓</span> 12 sessions per month</li>
+                    <li><span class="check">✓</span> 3 times per week</li>
+                    <li><span class="check">✓</span> Full equipment access</li>
+                    <li><span class="check">✓</span> Locker room access</li>
+                </ul>
+                <button class="pricing-btn">Choose Plan</button>
+            </div>
+
+            <div class="pricing-card">
+                <div class="pricing-header">
+                    <div class="pricing-name">
+                        <span class="ar">عرض القوة</span> <span style="color: var(--text-muted); font-size: 0.9rem;">| Strength</span>
+                    </div>
+                    <div class="pricing-desc">Balance between rest and training. 4 sessions per week.</div>
+                    <div class="pricing-price">
+                        2,000 <span class="currency">DA</span> <span class="period">/mo</span>
+                    </div>
+                </div>
+                <ul class="pricing-features">
+                    <li><span class="check">✓</span> 16 sessions per month</li>
+                    <li><span class="check">✓</span> 4 times per week</li>
+                    <li><span class="check">✓</span> Full equipment access</li>
+                    <li><span class="check">✓</span> Locker room access</li>
+                </ul>
+                <button class="pricing-btn">Choose Plan</button>
+            </div>
+
+            <div class="pricing-card featured">
+                <div class="pricing-header">
+                    <div class="pricing-name">
+                        <span class="ar">العرض الذهبي</span> <span style="color: var(--accent-gold); font-size: 0.9rem;">| GOLD (Most Requested)</span>
+                    </div>
+                    <div class="pricing-desc">Unlimited access. Train every day without limits.</div>
+                    <div class="pricing-price" style="color: var(--accent-gold);">
+                        2,500 <span class="currency">DA</span> <span class="period">/mo</span>
+                    </div>
+                </div>
+                <ul class="pricing-features">
+                    <li><span class="check" style="color: var(--accent-gold);">✓</span> Unlimited monthly access</li>
+                    <li><span class="check" style="color: var(--accent-gold);">✓</span> Train every day</li>
+                    <li><span class="check" style="color: var(--accent-gold);">✓</span> Best for fast results</li>
+                    <li><span class="check" style="color: var(--accent-gold);">✓</span> Full equipment access</li>
+                    <li><span class="check" style="color: var(--accent-gold);">✓</span> Priority support</li>
+                </ul>
+                <button class="pricing-btn">Choose Plan</button>
+            </div>
+
+            <!-- Women's Plans -->
+            <div class="pricing-card" style="margin-top: 2rem;">
+                <div class="pricing-header">
+                    <div class="pricing-name">
+                        <span class="ar">1 fois / semaine</span> <span style="color: var(--text-muted); font-size: 0.9rem;">| 1x/Week</span>
+                    </div>
+                    <div class="pricing-desc">Women's plan — 1 session per week.</div>
+                    <div class="pricing-original">2,000 DA</div>
+                    <div class="pricing-price">
+                        1,500 <span class="currency">DA</span> <span class="period">/mo</span>
+                    </div>
+                    <div class="pricing-discount">SAVE 500 DA</div>
+                </div>
+                <ul class="pricing-features">
+                    <li><span class="check">✓</span> 4 sessions per month</li>
+                    <li><span class="check">✓</span> Full equipment access</li>
+                    <li><span class="check">✓</span> Women's training zone</li>
+                </ul>
+                <button class="pricing-btn">Choose Plan</button>
+            </div>
+
+            <div class="pricing-card" style="margin-top: 2rem;">
+                <div class="pricing-header">
+                    <div class="pricing-name">
+                        <span class="ar">2 fois / semaine</span> <span style="color: var(--text-muted); font-size: 0.9rem;">| 2x/Week</span>
+                    </div>
+                    <div class="pricing-desc">Women's plan — 2 sessions per week.</div>
+                    <div class="pricing-original">3,000 DA</div>
+                    <div class="pricing-price">
+                        2,500 <span class="currency">DA</span> <span class="period">/mo</span>
+                    </div>
+                    <div class="pricing-discount">SAVE 500 DA</div>
+                </div>
+                <ul class="pricing-features">
+                    <li><span class="check">✓</span> 8 sessions per month</li>
+                    <li><span class="check">✓</span> Full equipment access</li>
+                    <li><span class="check">✓</span> Women's training zone</li>
+                </ul>
+                <button class="pricing-btn">Choose Plan</button>
+            </div>
+
+            <div class="pricing-card featured" style="margin-top: 2rem;">
+                <div class="pricing-header">
+                    <div class="pricing-name">
+                        <span class="ar">Illimité</span> <span style="color: var(--accent-gold); font-size: 0.9rem;">| Unlimited</span>
+                    </div>
+                    <div class="pricing-desc">Women's plan — Unlimited access.</div>
+                    <div class="pricing-original">5,500 DA</div>
+                    <div class="pricing-price" style="color: var(--accent-gold);">
+                        4,500 <span class="currency">DA</span> <span class="period">/mo</span>
+                    </div>
+                    <div class="pricing-discount" style="background: rgba(251, 191, 36, 0.15); color: var(--accent-gold);">SAVE 1,000 DA</div>
+                </div>
+                <ul class="pricing-features">
+                    <li><span class="check" style="color: var(--accent-gold);">✓</span> Unlimited sessions</li>
+                    <li><span class="check" style="color: var(--accent-gold);">✓</span> Train any day</li>
+                    <li><span class="check" style="color: var(--accent-gold);">✓</span> Women's training zone</li>
+                    <li><span class="check" style="color: var(--accent-gold);">✓</span> Best value</li>
+                </ul>
+                <button class="pricing-btn">Choose Plan</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Space/Gallery Section -->
+    <section id="space" class="gallery-section">
+        <div class="section-header">
+            <h2>Experience <span class="accent">Fitness Like Never Before</span></h2>
+            <p>Transform the way you train with innovative workouts, expert guidance, and state-of-the-art facilities.</p>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item large">
+                <img src="/mnt/agents/upload/Capture d'écran 2026-05-16 195755.png" alt="Oxygen Gym Interior with hexagonal LED ceiling">
+                <div class="gallery-overlay">
+                    <h4>Main Training Floor</h4>
+                    <p>Hexagonal LED lighting & premium equipment</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="/mnt/agents/upload/Capture d'écran 2026-05-16 195805.png" alt="Goku mural wall art">
+                <div class="gallery-overlay">
+                    <h4>Character Wall</h4>
+                    <p>Installing Muscles... Loading</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="/mnt/agents/upload/Capture d'écran 2026-05-16 195847.png" alt="Vegeta mural and cardio zone">
+                <div class="gallery-overlay">
+                    <h4>Cardio & Spin Zone</h4>
+                    <p>Train with the legends</p>
+                </div>
+            </div>
+            <div class="gallery-item wide">
+                <div style="width:100%; height:100%; background: linear-gradient(135deg, #1a1a1a, #2a2a2a); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 1rem;">
+                    <div style="font-size: 3rem;">🏋️‍♂️</div>
+                    <div style="text-align: center;">
+                        <h4 style="margin-bottom: 0.5rem;">50+ Professional Machines</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">From Hammer Strength to Life Fitness</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trainers Section -->
+    <section id="trainers">
+        <div class="section-header">
+            <h2>Your Fitness Goals, <span class="accent">Their Expertise</span></h2>
+            <p>Our team of certified trainers brings unparalleled expertise to help you achieve your fitness goals.</p>
+        </div>
+        <div class="trainers-grid">
+            <div class="trainer-card">
+                <div class="trainer-img" style="background: linear-gradient(135deg, #1a1a2e, #16213e);">
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 4rem; opacity: 0.3;">💪</div>
+                </div>
+                <div class="trainer-info">
+                    <h3>Blake Hunter</h3>
+                    <p>Strength & Conditioning</p>
+                    <div class="trainer-social">
+                        <a href="#">IG</a>
+                        <a href="#">FB</a>
+                        <a href="#">TT</a>
+                    </div>
+                </div>
+            </div>
+            <div class="trainer-card">
+                <div class="trainer-img" style="background: linear-gradient(135deg, #2e1a1a, #3e1621);">
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 4rem; opacity: 0.3;">🔥</div>
+                </div>
+                <div class="trainer-info">
+                    <h3>Liam Crossfit</h3>
+                    <p>HIIT & Functional Training</p>
+                    <div class="trainer-social">
+                        <a href="#">IG</a>
+                        <a href="#">FB</a>
+                        <a href="#">TT</a>
+                    </div>
+                </div>
+            </div>
+            <div class="trainer-card">
+                <div class="trainer-img" style="background: linear-gradient(135deg, #1a2e1a, #163e21);">
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 4rem; opacity: 0.3;">⚡</div>
+                </div>
+                <div class="trainer-info">
+                    <h3>Logan Torque</h3>
+                    <p>Powerlifting & Nutrition</p>
+                    <div class="trainer-social">
+                        <a href="#">IG</a>
+                        <a href="#">FB</a>
+                        <a href="#">TT</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="reviews" class="testimonials-section">
+        <div class="section-header">
+            <h2>Your Success Stories, <span class="accent">Our Inspiration</span></h2>
+            <p>Real reviews from real members. See what the Constantine community says about Oxygen Gym.</p>
+        </div>
+        <div class="testimonials-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; max-width: 1100px; margin: 0 auto;">
+            <div class="testimonial-card" style="margin: 0;">
+                <p class="testimonial-text">
+                    "Without exaggeration this is the Best gym in Constantine with a good price 💪💖"
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar" style="background: linear-gradient(135deg, #dc2626, #f59e0b);">CZ</div>
+                    <div class="author-info">
+                        <h4>Chaker Zebiri</h4>
+                        <div class="stars">★★★★★</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card" style="margin: 0;">
+                <p class="testimonial-text">
+                    "Fiha box w musculation top us..." <span style="color: var(--text-muted); font-size: 0.85rem;">(Boxing & bodybuilding, top class)</span>
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar" style="background: linear-gradient(135deg, #16a34a, #14b8a6);">YM</div>
+                    <div class="author-info">
+                        <h4>Yasser Merzoug</h4>
+                        <div class="stars">★★★★★</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card" style="margin: 0;">
+                <p class="testimonial-text">
+                    "Best gym"
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar" style="background: linear-gradient(135deg, #7c3aed, #ec4899);">AK</div>
+                    <div class="author-info">
+                        <h4>Aymen Kaoud</h4>
+                        <div class="stars">★★★★★</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3><div class="logo-icon" style="display: inline-flex; width: 28px; height: 28px; font-size: 0.8rem; vertical-align: middle; margin-right: 0.5rem;">O₂</div>Oxygen<span>Gym</span></h3>
+                <p>Your go-to destination for personalized workouts, expert plans, and real results. Located in the heart of Constantine with the best equipment and trainers in the city.</p>
+                <div class="footer-social">
+                    <a href="https://www.instagram.com/oxygen_gym_constantine2/?hl=fr" target="_blank" title="Instagram">📷</a>
+                    <a href="https://www.facebook.com/oxygengym25?locale=fr_FR" target="_blank" title="Facebook">f</a>
+                    <a href="https://www.tiktok.com/@oxygengym25" target="_blank" title="TikTok">♪</a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#trainers">Trainers</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Services</h4>
+                <ul>
+                    <li><a href="#">Strength Training</a></li>
+                    <li><a href="#">Cardio Zone</a></li>
+                    <li><a href="#">HIIT Classes</a></li>
+                    <li><a href="#">Personal Training</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Contact</h4>
+                <div class="footer-contact">
+                    <p>📍 9J45+3VG Station Khemisti, Constantine</p>
+                    <p>🕐 Open · Closes 12:11 AM</p>
+                    <p>⭐ 4.4/5 (20 Reviews)</p>
+                    <p>📱 DM us on Instagram or Facebook</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Oxygen Gym Constantine. Never Give Up — Great Things Take Time.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        // Close mobile menu on link click
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navLinks').classList.remove('active');
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .pricing-card, .trainer-card, .gallery-item, .testimonial-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
